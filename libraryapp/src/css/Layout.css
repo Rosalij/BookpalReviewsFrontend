@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -11,52 +12,69 @@ body {
     color: #333;
     font-family: 'Manrope', sans-serif;
 }
+
 ul {
     display: flex;
     gap: 1em;
+
     padding: 1em;
 
 }
-li {
+
+li a {
+    display: flex;
+    align-items: center;
+    gap: 0.2em;
+}
+
+li,
+.logout-button {
     list-style: none;
-color:white;
-align-items: center;    
-vertical-align: middle;
-    padding: 0.2em;
-    width: 5em;
+    color: white;
+max-height: 2em;
+padding: 1em;
+    vertical-align: middle;
+    margin: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 0.7em;
     transition: 0.5s;
-    width: 7.6em;
+    width: 7em;
 
 }
-a {
-    padding: 1em;
+
+
+
+a,
+.logout-button {
+    
     text-decoration: none;
-    color: inherit;
+    color: white;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 0.7em;
 }
-li:hover {
+
+li:hover,
+li:has(.active-link) {
+    background-color: #3d5966;
     color: #ffffff;
     cursor: pointer;
-    background-color: #3d5966;
-
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 footer {
     background-color: #2a3e47;
     color: rgb(255, 221, 182);
     text-align: center;
     padding: 1em;
-    position: fixed;
+    position:absolute;
+    bottom:0;
     width: 100%;
-    bottom: 0;
-    font-family: "noto serif", serif    ;
+    
+    font-family: "noto serif", serif;
 }
 
 header {
@@ -67,17 +85,19 @@ header {
     justify-content: space-between;
     align-items: center;
 }
+
 header div {
     display: flex;
     align-items: center;
     gap: 1em;
 }
+
 .headerTitle {
-   
-    font-weight:200;
+
+    font-weight: 200;
     color: rgb(201, 238, 245);
 
-    font-family: "manrope", serif    ; 
+    font-family: "manrope", serif;
     font-size: 2em;
 }
 
@@ -87,11 +107,13 @@ header div {
         flex-direction: column;
         align-items: center;
     }
+
     li {
         width: 100%;
         text-align: center;
     }
-     ul {
+
+    ul {
 
         gap: 0.5em;
     }

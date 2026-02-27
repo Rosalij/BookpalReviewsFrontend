@@ -3,7 +3,10 @@ import HomePage from "./pages/HomePage";
 import BookPage from "./pages/BookPage";
 import SingleBookPage from "./pages/SingleBookPage";
 import Layout from "./components/Layout";
-
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import RegisterPage from "./pages/RegisterPage"
 const router = createBrowserRouter([
 
     {
@@ -15,20 +18,32 @@ const router = createBrowserRouter([
                 element: <HomePage />
             },
             {
+                path: "/login",
+                element: <LoginPage />
+            },
+             {
+                path: "/register",
+                element: (
+                     <RegisterPage />
+                )
+            },
+            {
                 path: "/books",
-                element: <BookPage />
+                element: (
+                    <ProtectedRoute>  <BookPage /></ProtectedRoute>
+                )
             },
             {
                 path: "/books/:id",
-                element: <SingleBookPage />
+                element: (<ProtectedRoute><SingleBookPage /></ProtectedRoute>)
             },
             {
                 path: "/profile",
-                element: <h1>Profile</h1>
+                element: (<ProtectedRoute><ProfilePage /></ProtectedRoute>)
             },
             {
                 path: "/reviews",
-                element: <h1>Reviews</h1>
+                element: (<ProtectedRoute><h1>Reviews</h1></ProtectedRoute>)
             }
         ]
     }
