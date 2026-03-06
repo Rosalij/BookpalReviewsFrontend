@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import StarRating from "../components/StarRating";
@@ -44,35 +44,35 @@ function ProfilePage() {
 
         const reviewData = await res.json();
         setReviews(reviewData);
+        
+const uniqueBookIds = Array.from(
+  new Set(reviewData.map((r: Review) => r.bookId))
+) as string[];
 
-        // 🔥 Hämta unika bookIds
-        const uniqueBookIds = [
-          ...new Set(reviewData.map((r: Review) => r.bookId)),
-        ];
 
-        const bookResults = await Promise.all(
-          uniqueBookIds.map(async (id: string) => {
-            try {
-              const res = await fetch(
-                `https://librarybackend-c0p9.onrender.com/api/books/${id}`
-              );
-              const data = await res.json();
+       const bookResults = await Promise.all(
+  uniqueBookIds.map(async (id: string) => {
+    try {
+      const res = await fetch(
+        `https://librarybackend-c0p9.onrender.com/api/books/${id}`
+      );
+      const data = await res.json();
 
-              return {
-                id,
-                title: data.volumeInfo?.title || "Unknown Title",
-                thumbnail:
-                  data.volumeInfo?.imageLinks?.thumbnail || "",
-              };
-            } catch {
-              return {
-                id,
-                title: "Unknown Title",
-                thumbnail: "",
-              };
-            }
-          })
-        );
+      return {
+        id,
+        title: data.volumeInfo?.title || "Unknown Title",
+        thumbnail: data.volumeInfo?.imageLinks?.thumbnail || "",
+      };
+    } catch {
+      return {
+        id,
+        title: "Unknown Title",
+        thumbnail: "",
+      };
+    }
+  })
+);
+
 
         const bookMap: Record<string, BookData> = {};
         bookResults.forEach((b) => {

@@ -1,4 +1,4 @@
-import React from 'react'
+
 import LatestReviews from '../components/LatestReviews'
 
 function HomePage() {

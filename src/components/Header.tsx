@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { NavLink } from 'react-router-dom'
 import { useAuth } from "../context/AuthContext"
 import books from "../assets/books.png"
@@ -19,11 +19,15 @@ function Header() {
                 <ul>
 
                     <li>
-                        <NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}>
+                        <NavLink to="/"  className={({ isActive }: { isActive: boolean }) =>
+    isActive ? "active-link" : ""
+  }>
                             Home
                         </NavLink>
                     </li>     <li>
-                            <NavLink to="/books" className={({ isActive }) => isActive ? "active-link" : ""}>
+                            <NavLink to="/books"  className={({ isActive }: { isActive: boolean }) =>
+    isActive ? "active-link" : ""
+  }>
                                 Books
                             </NavLink>
                         </li>
@@ -35,13 +39,17 @@ function Header() {
                         <>
 
                             <li>
-                                <NavLink to="/profile" className={({ isActive }) => isActive ? "active-link" : ""}>
+                                <NavLink to="/profile"  className={({ isActive }: { isActive: boolean }) =>
+    isActive ? "active-link" : ""
+  }>
                                     <img src="../src/assets/account_circle.svg" alt="account icon" width="20" />
                                     Profile
                                 </NavLink>
                             </li>
                                <li>
-                                <NavLink to="/users" className={({ isActive }) => isActive ? "active-link" : ""}>
+                                <NavLink to="/users"  className={({ isActive }: { isActive: boolean }) =>
+    isActive ? "active-link" : ""
+  }>
                                    Follow
                                 </NavLink>
                             </li>
@@ -51,7 +59,9 @@ function Header() {
                     {/* Login / Logout */}
                     {!user ? (
                         <li>
-                            <NavLink to="/login" className={({ isActive }) => isActive ? "active-link" : ""}>
+                            <NavLink to="/login"  className={({ isActive }: { isActive: boolean }) =>
+    isActive ? "active-link" : ""
+  }>
                                 Login
                             </NavLink>
                         </li>
