@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import StarRating from "./StarRating";
+import { NavLink } from "react-router-dom";
 
 interface Review {
   _id: string;
   reviewText: string;
   rating: number;
-  user: { username: string } | null;
+  user: { username: string, _id: string } | null;
 }
 
 interface BookReviewsProps {
@@ -110,12 +111,12 @@ const BookReviews: React.FC<BookReviewsProps> = ({ bookId }) => {
         />
         <div style={{ margin: "0.5rem 0" }}>
           <p>Rate this book:</p>
-         <StarRating
-  rating={newRating}
-  editable
-  onChange={(val) => setNewRating(val)}
-/>
-       
+          <StarRating
+            rating={newRating}
+            editable
+            onChange={(val) => setNewRating(val)}
+          />
+
         </div>
         <button type="submit">Submit Review</button>
       </form>
@@ -129,7 +130,11 @@ const BookReviews: React.FC<BookReviewsProps> = ({ bookId }) => {
             key={r._id}
             style={{ borderTop: "1px solid #ccc", padding: "0.5rem 0" }}
           >
-            <strong>{r.user?.username || "Unknown"}</strong> ({r.rating} ⭐)
+            <strong>
+              <NavLink to={`/user/${r.user?._id}`}style={{color: "black"}}>
+                {r.user?.username || "Unknown"}
+              </NavLink>
+            </strong> <StarRating rating={r.rating} />
             <p>{r.reviewText}</p>
           </div>
         ))

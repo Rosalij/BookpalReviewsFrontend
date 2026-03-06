@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 interface Review {
   _id: string;
   bookId: string;
   reviewText: string;
   rating: number;
-  user: { username: string } | null;
+  user: { username: string, _id: string } | null;
 }
 
 interface ReviewWithBook extends Review {
@@ -73,7 +73,7 @@ const LatestReviews: React.FC = () => {
 
   return (
     <div style={{
-      margin: "auto", display: "flex", flexDirection: "column", justifyContent: "space-around", padding: "2em", backgroundColor: "white", borderRadius: "2em", marginBottom: "2em"
+      margin: "auto", maxWidth:"50em", display: "flex", flexDirection: "column", justifyContent: "space-around", padding: "2em", backgroundColor: "white", borderRadius: "2em", marginBottom: "2em"
     }}>
       <h2 style={{margin: "2em"}}>Latest Reviews</h2>
 
@@ -106,7 +106,11 @@ const LatestReviews: React.FC = () => {
             }}>
               <h4>{r.title}</h4>
               <div style={{alignItems: "center", gap: "0.5rem" }}>
-                <strong>{r.user?.username || "Unknown"}</strong>
+                 <strong>
+              <NavLink to={`/user/${r.user?._id}`}style={{color: "black"}}>
+                {r.user?.username || "Unknown"}
+              </NavLink>
+            </strong>
                 {renderStars(r.rating)}
               </div>
 

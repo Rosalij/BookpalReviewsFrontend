@@ -44,6 +44,7 @@ function RegisterPage() {
         <div className="form-container">
             <form onSubmit={handleSubmit}>
                 <h2>Register</h2>
+                <br />
                 <label htmlFor="username">Username:</label> <br/>
                 <input type="username"
 

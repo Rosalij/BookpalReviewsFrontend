@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
 .form-container {
-    background-color: antiquewhite;
+    background-color: #213f411a;
     width: 25em;
     margin: auto;
     margin-top: 3em;
@@ -16,9 +16,7 @@ div {
     text-align: center;
     
 }
-a:hover {
-    text-decoration: underline;
-}
+
 form {
     text-align: center;
 }

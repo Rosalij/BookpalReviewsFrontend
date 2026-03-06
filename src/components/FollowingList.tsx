@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import type { User } from "../types/auth.types";
-
+import accountIcon from "../assets/account_circle.svg";
 interface FollowingListProps {
   savedUsers: User[];
   setSavedUsers: React.Dispatch<React.SetStateAction<User[]>>;
@@ -35,17 +35,18 @@ const FollowingList: React.FC<FollowingListProps> = ({ savedUsers, setSavedUsers
             flexDirection:"row",
             verticalAlign: "center",
          gap: "2em",
-            justifyContent: "space-around",
-            alignItems: "center",
+        
+            alignItems: "space-evenly",
             padding: "0.8rem",
-            marginTop: "0.4em",
+            textAlign:"left",
+            marginTop: "1em",
             marginBottom: "0.5rem",
             backgroundColor: "white",
             borderRadius: "1.5rem",
           }}
-        >
-          <Link to={`/user/${u._id}`} style={{ fontWeight: 600, textDecoration: "none", color: "#111" }}>
-            {u.username}
+        >   <img src={accountIcon} alt="icon" width="25px" />  
+          <Link to={`/user/${u._id}`} style={{ width: "100%", fontWeight: 600, textDecoration: "none", color: "#111" }}>
+           {u.username}
           </Link>
           <button
             onClick={() => handleUnfollow(u._id)}
@@ -53,8 +54,9 @@ const FollowingList: React.FC<FollowingListProps> = ({ savedUsers, setSavedUsers
               padding: "0.3rem 0.8rem",
               cursor: "pointer",
               margin: "auto",
+              
               borderRadius: "1rem",
-              backgroundColor: "#ac4a3d",
+          
               color: "white",
               border: "none",
               

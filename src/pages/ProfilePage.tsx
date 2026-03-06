@@ -44,7 +44,7 @@ function ProfilePage() {
 
         const reviewData = await res.json();
         setReviews(reviewData);
-        
+
 const uniqueBookIds = Array.from(
   new Set(reviewData.map((r: Review) => r.bookId))
 ) as string[];
@@ -156,7 +156,7 @@ const uniqueBookIds = Array.from(
   };
 
   return (
-    <div style={{ maxWidth: "1000px", margin: "3rem auto", padding: "2rem", backgroundColor:"#e6e6e6", borderRadius: "2em"}}>
+    <div style={{  width: "55em", maxWidth: "1000px", margin: "3rem auto", padding: "2rem", backgroundColor:"#e6e6e6", borderRadius: "2em"}}>
       <h1>Your Profile</h1>
       <h2>Welcome to your book collection, {user?.username}</h2>
 <br /> <h3>Your reviews:</h3>
@@ -201,7 +201,7 @@ const uniqueBookIds = Array.from(
                       onChange={(val) => setEditRating(val)}
                     />
 <div>
-                    <textarea style={{width: "30em", height: "10em", border: "none", fontFamily:"manrope", margin: "1em"}}
+                    <textarea style={{display: "flex", flexWrap: "wrap", width: "100%", height: "10em", border: "none", fontFamily:"manrope", margin: "1em"}}
                       value={editText}
                       onChange={(e) => setEditText(e.target.value)}
                     />
@@ -221,7 +221,7 @@ const uniqueBookIds = Array.from(
                       {new Date(r.createdAt).toLocaleDateString()}
                     </small>
 
-                    <div style={{display:"flex", justifyContent:"space-around"}}>
+                    <div style={{display:"flex", justifyContent:"center", gap: "2em"}}>
                       <button style={{width: "7em"}}onClick={() => startEditing(r)}>
                         Edit
                       </button>

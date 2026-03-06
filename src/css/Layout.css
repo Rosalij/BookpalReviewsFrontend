@@ -27,6 +27,15 @@ ul {
 
 }
 
+strong {
+    font-size: 1.1em;
+    padding: 0.5em;
+
+}
+strong:hover {
+    text-decoration: underline;
+}
+
 li a {
     display: flex;
     align-items: center;
@@ -46,7 +55,7 @@ padding: 1em;
     align-items: center;
     border-radius: 0.7em;
     transition: 0.5s;
-    width: 7em;
+    width: 6em;
 
 }
 
@@ -54,14 +63,17 @@ p, h1, h2, h3, h4, h5 {
     font-family: "noto serif", serif;
 }
 
+
+
+
 a,
 .logout-button {
     
     text-decoration: none;
     color: white;
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 0.7em;
+    text-transform:capitalize;
+    font-weight: 600;
+    font-size: 1em;
 }
 
 li:hover,
@@ -85,12 +97,13 @@ footer {
     font-family: "noto serif", serif;
 }
 .logo img {
-    width: 12em;
+   
+    padding:1em;
     padding-left: 2em;
 }
 header {
     background-color: #2a3e47;
-    height: 19vh;
+
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.336);
     display: flex;
     justify-content: space-between;
@@ -101,6 +114,14 @@ header div {
     display: flex;
     align-items: center;
     gap: 1em;
+
+}
+.hamburger {
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
 }
 
 .headerTitle {
@@ -113,10 +134,52 @@ header div {
 }
 
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
+
+  .hamburger {
+    display: block;
+  }
+
+  nav {
+    position: absolute;
+    top:7em;
+    right: 0;
+    background: #2a3e47;
+    width: 100vw;
+    display: none;
+    flex-direction: column;
+
+  }
+
+  nav.nav-open {
+    display: block;
+  }
+
+  nav ul {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  header button {
+   margin: 0;
+
+  
+  }
+  header button:hover {
+    background-color: #2a3e47;
+    transform:scale(0.8)
+  }
+
+  nav li {
+    padding:1.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+
     header {
         flex-direction: column;
         align-items: center;
+justify-content: center;
 
     }
 
@@ -125,12 +188,10 @@ header div {
         text-align: center;
     }
 
-    ul {
-
-        gap: 0.5em;
-    }
-
+ 
     .logo img{
-        width: 5em;
+        width: 27%;
     }
+
+    
 }

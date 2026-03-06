@@ -6,9 +6,9 @@ function HomePage() {
     <>
     <div style={{margin: "auto", display: "flex", flexDirection: "column", justifyContent: "space-around", padding: "2em"
     }}>
-      <h1>Create your personal book collection</h1>
+      <h1 style={{fontSize:"1.8em"}}>Create your personal book collection</h1>
       <br />
-      <h2 style={{fontWeight: "400"}}>Review your favorite books <br />and share them with your friends</h2>
+      <h2 style={{fontWeight: "300", fontSize:"1.5em"}}>Review your favorite books <br />and share them with your friends!</h2>
     </div>
     <LatestReviews />
     </>

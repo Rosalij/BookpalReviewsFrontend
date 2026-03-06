@@ -62,7 +62,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
   };
 
   return (
-    <div style={{ maxWidth: "20em" }}>
+    <div style={{ maxWidth: "20em",  }}>
  
       <input
         type="text"
@@ -79,7 +79,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
       {filteredUsers.map(u => {
         const isFollowing = savedUsers.some(su => su._id === u._id);
         return (
-          <div
+          <div  
             key={u._id}
             style={{
               padding: "0.8rem",
@@ -91,7 +91,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
             
             }}
           >
-            <Link
+            <Link 
               to={`/user/${u._id}`}
               style={{
                 display: "flex",

@@ -1,74 +1,88 @@
-
 import { NavLink } from 'react-router-dom'
 import { useAuth } from "../context/AuthContext"
+import { useState } from "react"
 import books from "../assets/books.png"
 import profileicon from "../assets/account_circle.svg"
+
 function Header() {
     const { user, logout } = useAuth();
-
+    const [menuOpen, setMenuOpen] = useState(false);
 
     return (
         <header>
-            <NavLink to="/">
-                <div className='logo'>
-                    <img src={books} alt="books icon" width="200" />
-                    <p className="headerTitle">Bookpal Reviews</p>
-                </div>
-            </NavLink>
+            <div>
+                <NavLink to="/">
+                    <div className='logo'>
+                        <img src={books} alt="books icon" width="200" />
+                        <p className="headerTitle">Bookpal Reviews</p>
+                    </div>
+                </NavLink>
 
-            <nav>
+                {/* Hamburger */}
+                <button
+                    className="hamburger"
+                    onClick={() => setMenuOpen(!menuOpen)}
+
+                >
+                    ☰
+                </button>
+            </div>
+            <nav className={menuOpen ? "nav-open" : ""} style={{zIndex:"100"}}>
                 <ul>
 
                     <li>
-                        <NavLink to="/"  className={({ isActive }: { isActive: boolean }) =>
-    isActive ? "active-link" : ""
-  }>
+                        <NavLink to="/" onClick={() => setMenuOpen(false)} className={({ isActive }: { isActive: boolean }) =>
+                            isActive ? "active-link" : ""
+                        }>
                             Home
                         </NavLink>
-                    </li>     <li>
-                            <NavLink to="/books"  className={({ isActive }: { isActive: boolean }) =>
-    isActive ? "active-link" : ""
-  }>
-                                Books
-                            </NavLink>
-                        </li>
+                    </li>
 
+                    <li>
+                        <NavLink to="/books" onClick={() => setMenuOpen(false)} className={({ isActive }: { isActive: boolean }) =>
+                            isActive ? "active-link" : ""
+                        }>
+                            Books
+                        </NavLink>
+                    </li>
 
+                    <li>
+                        <NavLink to="/users" onClick={() => setMenuOpen(false)} className={({ isActive }: { isActive: boolean }) =>
+                            isActive ? "active-link" : ""
+                        }>
+                            Follow
+                        </NavLink>
+                    </li>
 
-                    {/* Only show when logged in */}
                     {user && (
                         <>
-
                             <li>
-                                <NavLink to="/profile"  className={({ isActive }: { isActive: boolean }) =>
-    isActive ? "active-link" : ""
-  }>
+                                <NavLink to="/profile" onClick={() => setMenuOpen(false)} className={({ isActive }: { isActive: boolean }) =>
+                                    isActive ? "active-link" : ""
+                                }>
                                     <img src={profileicon} alt="account icon" width="20" />
                                     Profile
-                                </NavLink>
-                            </li>
-                               <li>
-                                <NavLink to="/users"  className={({ isActive }: { isActive: boolean }) =>
-    isActive ? "active-link" : ""
-  }>
-                                   Follow
                                 </NavLink>
                             </li>
                         </>
                     )}
 
-                    {/* Login / Logout */}
                     {!user ? (
                         <li>
-                            <NavLink to="/login"  className={({ isActive }: { isActive: boolean }) =>
-    isActive ? "active-link" : ""
-  }>
+                            <NavLink to="/login" onClick={() => setMenuOpen(false)} className={({ isActive }: { isActive: boolean }) =>
+                                isActive ? "active-link" : ""
+                            }>
                                 Login
                             </NavLink>
                         </li>
                     ) : (
-                        <li onClick={logout} className="logout-button">
-                            Log out
+                        <li onClick={() => {
+                            logout();
+                            setMenuOpen(false);
+                        }}
+                            className="logout-button"
+                        >
+                            Logout
                         </li>
                     )}
 

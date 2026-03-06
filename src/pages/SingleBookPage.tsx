@@ -59,13 +59,13 @@ function SingleBookPage() {
         maxWidth: "1100px",
         margin: "3rem auto",
         padding: "2rem",
-        fontFamily: "Georgia, serif",
       }}
     >
       <div
         style={{
           display: "flex",
           gap: "3rem",
+          flexWrap:"wrap",
           alignItems: "flex-start",
         }}
       >
@@ -75,8 +75,10 @@ function SingleBookPage() {
           }
           alt={book.volumeInfo.title}
           style={{
-            width: "260px",
-            height: "390px",
+            width: "30%",
+            minWidth: "14em",
+            margin:"auto",
+            height: "fit-content",
             objectFit: "cover",
             borderRadius: "8px",
             boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
