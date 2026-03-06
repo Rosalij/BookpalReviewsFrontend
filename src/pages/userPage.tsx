@@ -1,92 +1,122 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useParams, Link } from "react-router-dom";
 import type { User } from "../types/auth.types";
+import type { Review } from "../types/review.types";
+import StarRating from "../components/StarRating";
 
-const UserPage: React.FC = () => {
+interface ReviewWithBook extends Review {
+  bookInfo?: { 
+    title: string;
+    authors?: string[];
+    thumbnail?: string;
+  };
+}
+
+const UserProfilePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { user: currentUser, token } = useAuth();
-
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState<ReviewWithBook[]>([]);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingReviews, setLoadingReviews] = useState(true);
   const [error, setError] = useState("");
-  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
+    // Fetch user profile
     const fetchUser = async () => {
-      if (!id) return;
-
-      setLoading(true);
       try {
-        const res = await fetch(
-          `https://librarybackend-c0p9.onrender.com/api/users/${id}`,
-       
-        );
-
-        if (!res.ok) throw new Error("Failed to fetch user");
+        setLoadingUser(true);
+        const res = await fetch(`https://librarybackend-c0p9.onrender.com/api/users/${id}`);
+        if (!res.ok) throw new Error("Failed to fetch user profile");
         const data: User = await res.json();
         setUser(data);
-
-        // Optionally check if user is saved
-        if (currentUser) {
-          const meRes = await fetch(
-            `https://librarybackend-c0p9.onrender.com/api/users/me/saved`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-          if (meRes.ok) {
-            const savedUsers: User[] = await meRes.json();
-            setSaved(savedUsers.some((u) => u._id === id));
-          }
-        }
       } catch (err: any) {
         console.error(err);
-        setError(err.message || "Error loading user");
+        setError(err.message || "Error fetching user profile");
       } finally {
-        setLoading(false);
+        setLoadingUser(false);
       }
     };
 
     fetchUser();
-  }, [id, token, currentUser]);
+  }, [id]);
 
-  const handleSaveToggle = async () => {
-    if (!token || !id) return;
+  useEffect(() => {
+    // Fetch reviews for this user
+    const fetchReviews = async () => {
+      try {
+        setLoadingReviews(true);
+        const res = await fetch(`https://librarybackend-c0p9.onrender.com/api/users/${id}/reviews`);
+        if (!res.ok) throw new Error("Failed to fetch user reviews");
+        const reviewsData: ReviewWithBook[] = await res.json();
+        setReviews(reviewsData);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || "Error fetching reviews");
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
 
-    try {
-      const method = saved ? "DELETE" : "POST";
-      const res = await fetch(
-        `https://librarybackend-c0p9.onrender.com/api/users/${id}/save`,
-        {
-          method,
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      if (!res.ok) throw new Error("Failed to update saved users");
-      setSaved(!saved);
-    } catch (err) {
-      console.error(err);
-      alert("Error saving user");
-    }
-  };
+    fetchReviews();
+  }, [id]);
 
-  if (loading) return <p>Loading user profile...</p>;
+  if (loadingUser) return <p>Loading user profile...</p>;
   if (error) return <p>{error}</p>;
-  if (!user) return <p>User not found.</p>;
+  if (!user) return <p>User not found</p>;
 
   return (
-    <div style={{ maxWidth: "600px", margin: "2rem auto", padding: "1rem" }}>
-      <h1>{user.username}</h1>
-      <p>Joined: {new Date(user.createdAt!).toLocaleDateString()}</p>
+    <div style={{ maxWidth: "1000px", margin: "3rem auto", padding: "2rem", backgroundColor: "#e6e6e6", borderRadius: "2em" }}>
+      <h1 style={{ color: "#000" }}>{user.username}</h1>
+      <h2 style={{ color: "#000", marginTop: "1rem" }}>Reviews</h2>
 
-      {currentUser && currentUser._id !== user._id && (
-        <button onClick={handleSaveToggle}>
-          {saved ? "Remove from saved" : "Save user"}
-        </button>
+      {loadingReviews ? (
+        <p>Loading reviews...</p>
+      ) : reviews.length === 0 ? (
+        <p>This user hasn't written any reviews yet.</p>
+      ) : (
+        reviews.map((r) => (
+          <div
+            key={r._id}
+            style={{
+              display: "flex",
+              gap: "1.5rem",
+              padding: "1rem 0",
+              borderBottom: "1px solid #000",
+              color: "#000",
+            }}
+          >
+            {r.bookInfo?.thumbnail && (
+              <img
+                src={r.bookInfo.thumbnail}
+                alt={r.bookInfo.title}
+                style={{ width: "100px", objectFit: "contain" }}
+              />
+            )}
+
+            <div style={{ flex: 1, minWidth: "200px" }}>
+              <Link to={`/book/${r.bookId}`} style={{  fontWeight: "bold", textDecoration: "none", color: "#000" }}>
+                {r.bookInfo?.title || "Unknown Title"}
+              </Link>
+
+              {r.bookInfo?.authors && (
+                <p style={{ margin: "0.2rem 0" }}>by {r.bookInfo.authors.join(", ")}</p>
+              )}
+
+              <StarRating rating={r.rating} />
+              <p style={{ margin: "0.2rem 0" }}>
+                ({r.rating} / 5)
+              </p>
+
+              <p style={{ fontSize: "0.8rem", color: "#555", margin: "0.2rem 0" }}>
+                Posted: {new Date(r.createdAt).toLocaleDateString()}
+              </p>
+              <p style={{ margin: 0 }}>{r.reviewText}</p>
+            </div>
+          </div>
+        ))
       )}
     </div>
   );
 };
 
-export default UserPage;
+export default UserProfilePage;

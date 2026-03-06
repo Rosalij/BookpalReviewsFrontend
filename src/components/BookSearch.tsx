@@ -68,7 +68,7 @@ function BookSearch() {
           placeholder="Enter book title or author"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          style={{ padding: "0.5rem", width: "20%" }}
+          style={{ padding: "0.5rem", width: "50%" }}
         />
         <button type="submit" style={{ padding: "0.5rem 1rem", marginLeft: "0.5rem" }}>
           Search

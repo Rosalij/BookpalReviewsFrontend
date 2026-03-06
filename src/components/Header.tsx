@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from "../context/AuthContext"
-
+import books from "../assets/books.png"
 function Header() {
     const { user, logout } = useAuth();
 
@@ -10,8 +10,8 @@ function Header() {
         <header>
             <NavLink to="/">
                 <div className='logo'>
-                    <img src="./src/assets/books.png" alt="books icon" width="200" />
-                    <p className="headerTitle">Bookshelf Reviews</p>
+                    <img src={books} alt="books icon" width="200" />
+                    <p className="headerTitle">Bookpal Reviews</p>
                 </div>
             </NavLink>
 
@@ -42,7 +42,7 @@ function Header() {
                             </li>
                                <li>
                                 <NavLink to="/users" className={({ isActive }) => isActive ? "active-link" : ""}>
-                                    Friends
+                                   Follow
                                 </NavLink>
                             </li>
                         </>

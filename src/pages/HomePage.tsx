@@ -8,7 +8,7 @@ function HomePage() {
     }}>
       <h1>Create your personal book collection</h1>
       <br />
-      <h2>Review your favorite books <br />and share them with your friends</h2>
+      <h2 style={{fontWeight: "400"}}>Review your favorite books <br />and share them with your friends</h2>
     </div>
     <LatestReviews />
     </>
