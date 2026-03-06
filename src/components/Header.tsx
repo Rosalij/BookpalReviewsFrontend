@@ -2,6 +2,7 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from "../context/AuthContext"
 import books from "../assets/books.png"
+import profileicon from "../assets/account_circle.svg"
 function Header() {
     const { user, logout } = useAuth();
 
@@ -42,7 +43,7 @@ function Header() {
                                 <NavLink to="/profile"  className={({ isActive }: { isActive: boolean }) =>
     isActive ? "active-link" : ""
   }>
-                                    <img src="../src/assets/account_circle.svg" alt="account icon" width="20" />
+                                    <img src={profileicon} alt="account icon" width="20" />
                                     Profile
                                 </NavLink>
                             </li>
