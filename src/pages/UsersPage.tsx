@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SearchUsers from "../components/SearchUsers";
+import SearchUsers from "../components/searchUsers";
 import FollowingList from "../components/FollowingList";
 import type { User } from "../types/auth.types";
 
