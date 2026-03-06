@@ -2,7 +2,7 @@ import React from 'react'
 import { useAuth } from "../context/AuthContext"
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useEffect } from 'react'
-import '../css/form.css'
+import '../css/Form.css'
 
 function LoginPage() {
 
