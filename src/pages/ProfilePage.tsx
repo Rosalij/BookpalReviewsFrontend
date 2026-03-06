@@ -156,7 +156,7 @@ const uniqueBookIds = Array.from(
   };
 
   return (
-    <div style={{  width: "55em", maxWidth: "1000px", margin: "3rem auto", padding: "2rem", backgroundColor:"#e6e6e6", borderRadius: "2em"}}>
+    <div style={{  width: "100%", maxWidth: "1000px", margin: "3rem auto", padding: "2rem", backgroundColor:"#e6e6e6", borderRadius: "2em"}}>
       <h1>Your Profile</h1>
       <h2>Welcome to your book collection, {user?.username}</h2>
 <br /> <h3>Your reviews:</h3>
@@ -206,7 +206,7 @@ const uniqueBookIds = Array.from(
                       onChange={(e) => setEditText(e.target.value)}
                     />
   </div>
-                    <button style={{ marginRight: "3em", width: "7em", color: "white" }} onClick={() => handleUpdate(r._id)}>
+                    <button style={{ margin:"1em", width: "7em", color: "white" }} onClick={() => handleUpdate(r._id)}>
                       Save
                     </button>
                     <button style={{width: "7em", color: "white" }} onClick={() => setEditingId(null)}>

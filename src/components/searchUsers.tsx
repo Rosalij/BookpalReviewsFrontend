@@ -76,7 +76,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
       {error && <p>{error}</p>}
       {!loading && filteredUsers.length === 0 && <p>No users found.</p>}
 
-      {filteredUsers.map(u => {
+    {filteredUsers.slice(0, 5).map(u => {
         const isFollowing = savedUsers.some(su => su._id === u._id);
         return (
           <div  
@@ -90,7 +90,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
               justifyContent: "space-between"
             
             }}
-          >
+          > 
             <Link 
               to={`/user/${u._id}`}
               style={{

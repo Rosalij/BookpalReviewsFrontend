@@ -73,7 +73,7 @@ const LatestReviews: React.FC = () => {
 
   return (
     <div style={{
-      margin: "auto", maxWidth:"50em", display: "flex", flexDirection: "column", justifyContent: "space-around", padding: "2em", backgroundColor: "white", borderRadius: "2em", marginBottom: "2em"
+      margin: "auto", maxWidth:"50em", display: "flex", flexDirection: "column", justifyContent: "space-around", backgroundColor: "white", borderRadius: "2em", marginBottom: "2em"
     }}>
       <h2 style={{margin: "2em"}}>Latest Reviews</h2>
 
@@ -87,7 +87,7 @@ const LatestReviews: React.FC = () => {
               display: "flex",
               gap: "1rem",
               borderBottom: "1px solid #ccc",
-              padding: "1rem 0",
+              padding: "1.5em",
               alignItems: "center",
               
             }}
