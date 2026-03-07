@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-
-interface Review {
-  _id: string;
-  bookId: string;
-  reviewText: string;
-  rating: number;
-  user: { username: string, _id: string } | null;
-}
+import type { Review } from "../types/review.types";
 
 interface ReviewWithBook extends Review {
-  thumbnail?: string;
-  title?: string;
+  title: string;
+  thumbnail: string;
 }
 
 const LatestReviews: React.FC = () => {
@@ -24,30 +17,42 @@ const LatestReviews: React.FC = () => {
         const res = await fetch(
           "https://librarybackend-c0p9.onrender.com/api/reviews/latest"
         );
+        if (!res.ok) throw new Error("Failed to fetch reviews");
         const reviewData: Review[] = await res.json();
 
-        // Fetch book data for each review
-        const reviewsWithBooks = await Promise.all(
+
+        const getBooks = await Promise.all(
           reviewData.map(async (review) => {
+            let title = "Unknown Title";
+            let thumbnail = "./placeholder.jpg";
+
             try {
               const bookRes = await fetch(
                 `https://librarybackend-c0p9.onrender.com/api/books/${review.bookId}`
               );
-              const bookData = await bookRes.json();
+             if (bookRes.ok) {
+  const bookData = await bookRes.json();
 
-              return {
-                ...review,
-                thumbnail:
-                  bookData.volumeInfo?.imageLinks?.thumbnail || "",
-                title: bookData.volumeInfo?.title || "Unknown Title",
-              };
-            } catch {
-              return { ...review };
+  title = bookData.volumeInfo?.title || "Unknown Title";
+
+  thumbnail =
+    bookData.volumeInfo?.imageLinks?.thumbnail ||
+    "/placeholder.jpg";
+}
+
+            } catch (err) {
+              console.error(`Failed to fetch book ${review.bookId}`, err);
             }
+
+            return {
+              ...review,
+              title,
+              thumbnail,
+            };
           })
         );
 
-        setReviews(reviewsWithBooks);
+        setReviews(getBooks);
       } catch (err) {
         console.error("Failed to fetch latest reviews", err);
       } finally {
@@ -60,22 +65,26 @@ const LatestReviews: React.FC = () => {
 
   if (loading) return <p>Loading latest reviews...</p>;
 
-  const renderStars = (rating: number) => {
-    return (
-      <span style={{ color: "#f5a623", fontSize: "1.4rem" }}>
-        {[1, 2, 3, 4, 5].map((star) =>
-          star <= rating ? "★" : "☆"
-        )}
-      </span>
-    );
-  };
-
+  const renderStars = (rating: number) => (
+    <span style={{ color: "#f5a623", fontSize: "1.4rem" }}>
+      {[1, 2, 3, 4, 5].map((star) => (star <= rating ? "★" : "☆"))}
+    </span>
+  );
 
   return (
-    <div style={{
-      margin: "auto", maxWidth:"50em", display: "flex", flexDirection: "column", justifyContent: "space-around", backgroundColor: "white", borderRadius: "2em", marginBottom: "2em"
-    }}>
-      <h2 style={{margin: "2em"}}>Latest Reviews</h2>
+    <div
+      style={{
+        margin: "auto",
+        maxWidth: "50em",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        backgroundColor: "white",
+        borderRadius: "2em",
+        marginBottom: "2em",
+      }}
+    >
+      <h2 style={{ margin: "2em" }}>Latest Reviews</h2>
 
       {reviews.length === 0 ? (
         <p>No reviews yet.</p>
@@ -89,34 +98,52 @@ const LatestReviews: React.FC = () => {
               borderBottom: "1px solid #ccc",
               padding: "1.5em",
               alignItems: "center",
-              
             }}
           >
-            {/* Book Image */}
             <img
-              src={r.thumbnail || "./placeholder.jpg"}
+              src={r.thumbnail}
               alt={r.title}
               style={{ width: "100px", objectFit: "cover" }}
             />
 
-            {/* Review Info */}
-            <div style={{
-              display: "flex", width: "100%", flexDirection: "column",
-              gap: "1em"
-            }}>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                flexDirection: "column",
+                gap: "1em",
+              }}
+            >
               <h4>{r.title}</h4>
-              <div style={{alignItems: "center", gap: "0.5rem" }}>
-                 <strong>
-              <NavLink to={`/user/${r.user?._id}`}style={{color: "black"}}>
-                {r.user?.username || "Unknown"}
-              </NavLink>
-            </strong>
-                {renderStars(r.rating)}
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                }}
+              >
+                {r.user ? (
+                  <strong>
+                    <NavLink
+                      to={`/user/${r.user._id}`}
+                      style={{ color: "black" }}
+                    >
+                      {r.user.username}
+                    </NavLink>
+                  </strong>
+                ) : (
+                  <strong>Unknown</strong>
+                )}
+                {renderStars(r.rating || 0)}
               </div>
 
-              <p>{r.reviewText}</p>
+              <p>{r.reviewText || "No review text available."}</p>
 
-              <Link to={`/book/${r.bookId}`} style={{ color: "black",width: "100%",}}>
+              <Link
+                to={`/book/${r.bookId}`}
+                style={{ color: "black", width: "100%" }}
+              >
                 View Book →
               </Link>
             </div>
