@@ -4,11 +4,12 @@ import type { User } from "../types/auth.types";
 import type { Review } from "../types/review.types";
 import StarRating from "../components/StarRating";
 
+//interface extending Review
 interface ReviewWithBook extends Review {
   bookInfo?: { 
     title: string;
     authors?: string[];
-    thumbnail?: string;
+    thumbnail?: string; //thumbnail from google books
   };
 }
 
@@ -73,7 +74,7 @@ const UserProfilePage: React.FC = () => {
         <p>Loading reviews...</p>
       ) : reviews.length === 0 ? (
         <p>This user hasn't written any reviews yet.</p>
-      ) : (
+      ) : ( //shoq all of the current users reviews
         reviews.map((r) => (
           <div
             key={r._id}
@@ -102,6 +103,7 @@ const UserProfilePage: React.FC = () => {
                 <p style={{ margin: "0.2rem 0" }}>by {r.bookInfo.authors.join(", ")}</p>
               )}
 
+{/* Star Rating component with current rating */}
               <StarRating rating={r.rating} />
               <p style={{ margin: "0.2rem 0" }}>
                 ({r.rating} / 5)

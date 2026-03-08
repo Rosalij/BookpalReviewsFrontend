@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import type { Review } from "../types/review.types";
+import StarRating from "./StarRating";
 
+
+//Component for getting the 5 latest reviews in a list
+
+//interface extending Review type form matching google books
 interface ReviewWithBook extends Review {
   title: string;
   thumbnail: string;
@@ -11,6 +16,7 @@ const LatestReviews: React.FC = () => {
   const [reviews, setReviews] = useState<ReviewWithBook[]>([]);
   const [loading, setLoading] = useState(true);
 
+  //fetch latest reviews on page load
   useEffect(() => {
     const fetchLatest = async () => {
       try {
@@ -20,7 +26,7 @@ const LatestReviews: React.FC = () => {
         if (!res.ok) throw new Error("Failed to fetch reviews");
         const reviewData: Review[] = await res.json();
 
-
+        //After fetching reviews, get book info via google books, with bookId
         const getBooks = await Promise.all(
           reviewData.map(async (review) => {
             let title = "Unknown Title";
@@ -30,15 +36,15 @@ const LatestReviews: React.FC = () => {
               const bookRes = await fetch(
                 `https://librarybackend-c0p9.onrender.com/api/books/${review.bookId}`
               );
-             if (bookRes.ok) {
-  const bookData = await bookRes.json();
+              if (bookRes.ok) {
+                const bookData = await bookRes.json();
 
-  title = bookData.volumeInfo?.title || "Unknown Title";
+                title = bookData.volumeInfo?.title || "Unknown Title";
 
-  thumbnail =
-    bookData.volumeInfo?.imageLinks?.thumbnail ||
-    "/placeholder.jpg";
-}
+                thumbnail =
+                  bookData.volumeInfo?.imageLinks?.thumbnail ||
+                  "/placeholder.jpg";
+              }
 
             } catch (err) {
               console.error(`Failed to fetch book ${review.bookId}`, err);
@@ -52,6 +58,7 @@ const LatestReviews: React.FC = () => {
           })
         );
 
+        //set reviews
         setReviews(getBooks);
       } catch (err) {
         console.error("Failed to fetch latest reviews", err);
@@ -65,11 +72,6 @@ const LatestReviews: React.FC = () => {
 
   if (loading) return <p>Loading latest reviews...</p>;
 
-  const renderStars = (rating: number) => (
-    <span style={{ color: "#f5a623", fontSize: "1.4rem" }}>
-      {[1, 2, 3, 4, 5].map((star) => (star <= rating ? "★" : "☆"))}
-    </span>
-  );
 
   return (
     <div
@@ -84,6 +86,7 @@ const LatestReviews: React.FC = () => {
         marginBottom: "2em",
       }}
     >
+      {/*list of latest reviews*/}
       <h2 style={{ margin: "2em" }}>Latest Reviews</h2>
 
       {reviews.length === 0 ? (
@@ -119,6 +122,7 @@ const LatestReviews: React.FC = () => {
               <div
                 style={{
                   display: "flex",
+                  margin: "auto",
                   alignItems: "center",
                   gap: "0.5rem",
                 }}
@@ -135,7 +139,8 @@ const LatestReviews: React.FC = () => {
                 ) : (
                   <strong>Unknown</strong>
                 )}
-                {renderStars(r.rating || 0)}
+  {/*Star rating component used for rating for each review*/}     
+ <StarRating rating={r.rating} />
               </div>
 
               <p>{r.reviewText || "No review text available."}</p>

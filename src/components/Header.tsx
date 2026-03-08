@@ -4,8 +4,10 @@ import { useState } from "react"
 import books from "../assets/books.png"
 import profileicon from "../assets/account_circle.svg"
 
+{/* Header Component */ }
 function Header() {
     const { user, logout } = useAuth();
+    {/* State for hamburger menu */ }
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
@@ -27,7 +29,7 @@ function Header() {
                     ☰
                 </button>
             </div>
-            <nav className={menuOpen ? "nav-open" : ""} style={{zIndex:"100"}}>
+            <nav className={menuOpen ? "nav-open" : ""} style={{ zIndex: "100" }}>
                 <ul>
 
                     <li>
@@ -54,6 +56,7 @@ function Header() {
                         </NavLink>
                     </li>
 
+                    {/* If user is loggen in, show links */}
                     {user && (
                         <>
                             <li>
@@ -67,6 +70,7 @@ function Header() {
                         </>
                     )}
 
+                    {/* If no user is logged in, show login, otherwise show logout*/}
                     {!user ? (
                         <li>
                             <NavLink to="/login" onClick={() => setMenuOpen(false)} className={({ isActive }: { isActive: boolean }) =>

@@ -3,12 +3,14 @@ import { useAuth } from "../context/AuthContext";
 import StarRating from "./StarRating";
 import { NavLink } from "react-router-dom";
 
+//review interface
 interface Review {
   _id: string;
   reviewText: string;
   rating: number;
   user: { username: string, _id: string } | null;
 }
+
 
 interface BookReviewsProps {
   bookId: string;
@@ -60,6 +62,7 @@ const BookReviews: React.FC<BookReviewsProps> = ({ bookId }) => {
       return;
     }
 
+    //Post review
     try {
       const res = await fetch(
         "https://librarybackend-c0p9.onrender.com/api/reviews",

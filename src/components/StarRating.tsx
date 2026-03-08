@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 
+//Star rating component to show rating as stars
 interface StarRatingProps {
   rating: number;
-  onChange?: (rating: number) => void;
-  editable?: boolean;
+  onChange?: (rating: number) => void; 
+  editable?: boolean; //to edit rating
 }
-
+//props
 const StarRating: React.FC<StarRatingProps> = ({
   rating,
   onChange,
   editable = false,
 }) => {
+  //state for hover effect
   const [hovered, setHovered] = useState<number | null>(null);
 
   const displayRating = hovered !== null ? hovered : rating;
@@ -22,7 +24,7 @@ const StarRating: React.FC<StarRatingProps> = ({
         display: "inline-flex",
         gap: "4px",
       }}
-    >
+    >  
       {[1, 2, 3, 4, 5].map((star) => (
         <span
           key={star}

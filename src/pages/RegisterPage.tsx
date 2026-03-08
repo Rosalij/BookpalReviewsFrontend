@@ -1,6 +1,7 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 
+//page for registering user form
 function RegisterPage() {
     const [username, setUsername] = React.useState("")
     const [email, setEmail] = React.useState("")
@@ -9,6 +10,7 @@ function RegisterPage() {
 
     const navigate = useNavigate()
 
+    //handle submit form
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError("")
@@ -32,15 +34,15 @@ function RegisterPage() {
             if (!response.ok) {
                 throw new Error("Registration failed")
             }
-
+//if registered, go to log in
             navigate("/login")
             alert("User Created! " + email + " " + username)
         } catch (error) {
             setError("Could not register user")
         }
     }
-
-    return (
+//register form
+    return ( 
         <div className="form-container">
             <form onSubmit={handleSubmit}>
                 <h2>Register</h2>

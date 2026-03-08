@@ -1,6 +1,6 @@
 
 import LatestReviews from '../components/LatestReviews'
-
+//home page with latest reviews component
 function HomePage() {
   return (
     <>

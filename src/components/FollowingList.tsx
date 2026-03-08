@@ -6,10 +6,12 @@ interface FollowingListProps {
   savedUsers: User[];
   setSavedUsers: React.Dispatch<React.SetStateAction<User[]>>;
 }
-
+     {/* Props */}
 const FollowingList: React.FC<FollowingListProps> = ({ savedUsers, setSavedUsers }) => {
+    {/* Get token from localstorage */}
   const token = localStorage.getItem("token");
 
+     {/* Unfollow another user using delete method to database */}
   const handleUnfollow = async (userId: string) => {
     if (!token) return;
 
@@ -22,11 +24,13 @@ const FollowingList: React.FC<FollowingListProps> = ({ savedUsers, setSavedUsers
     setSavedUsers(prev => prev.filter(u => u._id !== userId));
   };
 
+     {/* if no user, return text */}
   if (savedUsers.length === 0) return <p>You are not following anyone yet.</p>;
 
   return (
     <div>
-
+      
+   {/* List of followers / saved users */}
       {savedUsers.map(u => (
         <div
           key={u._id}
@@ -48,6 +52,8 @@ const FollowingList: React.FC<FollowingListProps> = ({ savedUsers, setSavedUsers
           <Link to={`/user/${u._id}`} style={{ width: "100%", fontWeight: 600, textDecoration: "none", color: "#111" }}>
            {u.username}
           </Link>
+
+             {/* Button for unfollowing user */}
           <button
             onClick={() => handleUnfollow(u._id)}
             style={{

@@ -1,5 +1,5 @@
 
-
+   {/* Footer Component */}
 function Footer() {
   return (
     <div>

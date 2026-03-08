@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext"
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useEffect } from 'react'
 import '../css/Form.css'
-
+//login form page
 function LoginPage() {
 
     const [email, setEmail] = React.useState('')
@@ -13,18 +13,20 @@ function LoginPage() {
     const { login, user } = useAuth()
     const navigate = useNavigate()
 
+    
     useEffect(() => {
         if (user) {
             navigate("/profile")
         }
     }, [user, navigate])
 
+    //handle form submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         setError('')
 
-        try {
+        try { //login
             await login({ email, password })
             navigate("/profile")
         } catch (error) {
@@ -35,7 +37,7 @@ function LoginPage() {
     return (
         <div className="form-container">
             <h2>Login</h2>
-
+  {/*login form*/}
             <form onSubmit={handleSubmit}>
 
                 {error && (
@@ -69,7 +71,7 @@ function LoginPage() {
                 <button type="submit">Sign in!</button>
 
             </form>
-
+  {/*register link*/}
             <NavLink to="/register" style={{color:'black'}}>
                 Register new user
             </NavLink>

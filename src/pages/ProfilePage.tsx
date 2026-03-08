@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import StarRating from "../components/StarRating";
 
+//review interface
 interface Review {
   _id: string;
   bookId: string;
@@ -10,7 +11,7 @@ interface Review {
   rating: number;
   createdAt: string;
 }
-
+//book interface
 interface BookData {
   title: string;
   thumbnail: string;
@@ -22,12 +23,14 @@ function ProfilePage() {
   const [books, setBooks] = useState<Record<string, BookData>>({});
   const [loading, setLoading] = useState(true);
 
+  //edit review states
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const [editRating, setEditRating] = useState(0);
 
   const token = localStorage.getItem("token");
 
+  //fetch users reviews on page load
   useEffect(() => {
     const fetchReviews = async () => {
       if (!token) return;
@@ -37,7 +40,7 @@ function ProfilePage() {
           "https://librarybackend-c0p9.onrender.com/api/reviews/my-reviews",
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`, //check token
             },
           }
         );
@@ -45,33 +48,33 @@ function ProfilePage() {
         const reviewData = await res.json();
         setReviews(reviewData);
 
-const uniqueBookIds = Array.from(
-  new Set(reviewData.map((r: Review) => r.bookId))
-) as string[];
+        const uniqueBookIds = Array.from(
+          new Set(reviewData.map((r: Review) => r.bookId))
+        ) as string[];
 
 
-       const bookResults = await Promise.all(
-  uniqueBookIds.map(async (id: string) => {
-    try {
-      const res = await fetch(
-        `https://librarybackend-c0p9.onrender.com/api/books/${id}`
-      );
-      const data = await res.json();
+        const bookResults = await Promise.all(
+          uniqueBookIds.map(async (id: string) => {
+            try {
+              const res = await fetch(
+                `https://librarybackend-c0p9.onrender.com/api/books/${id}`
+              );
+              const data = await res.json();
 
-      return {
-        id,
-        title: data.volumeInfo?.title || "Unknown Title",
-        thumbnail: data.volumeInfo?.imageLinks?.thumbnail || "",
-      };
-    } catch {
-      return {
-        id,
-        title: "Unknown Title",
-        thumbnail: "",
-      };
-    }
-  })
-);
+              return {
+                id,
+                title: data.volumeInfo?.title || "Unknown Title",
+                thumbnail: data.volumeInfo?.imageLinks?.thumbnail || "",
+              };
+            } catch {
+              return {
+                id,
+                title: "Unknown Title",
+                thumbnail: "",
+              };
+            }
+          })
+        );
 
 
         const bookMap: Record<string, BookData> = {};
@@ -93,12 +96,14 @@ const uniqueBookIds = Array.from(
     fetchReviews();
   }, [token]);
 
+
   const startEditing = (review: Review) => {
     setEditingId(review._id);
     setEditText(review.reviewText);
     setEditRating(review.rating);
   };
 
+  //update review
   const handleUpdate = async (id: string) => {
     if (!token) return;
 
@@ -130,6 +135,7 @@ const uniqueBookIds = Array.from(
     }
   };
 
+  //delete review
   const handleDelete = async (id: string) => {
     if (!token) return;
 
@@ -156,16 +162,18 @@ const uniqueBookIds = Array.from(
   };
 
   return (
-    <div style={{  width: "100%", maxWidth: "1000px", margin: "3rem auto", padding: "2rem", backgroundColor:"#e6e6e6", borderRadius: "2em"}}>
+    <div style={{ width: "100%", maxWidth: "1000px", margin: "3rem auto", padding: "2rem", backgroundColor: "#e6e6e6", borderRadius: "2em" }}>
       <h1>Your Profile</h1>
       <h2>Welcome to your book collection, {user?.username}</h2>
-<br /> <h3>Your reviews:</h3>
+      <br /> <h3>Your reviews:</h3>
       {loading ? (
+        
         <p>Loading...</p>
+        
       ) : reviews.length === 0 ? (
         <p>You have not written any reviews yet.</p>
       ) : (
-        reviews.map((r) => {
+        reviews.map((r) => {  {/*show book reviews*/}
           const book = books[r.bookId];
 
           return (
@@ -184,15 +192,15 @@ const uniqueBookIds = Array.from(
                 style={{
                   width: "100px",
                   objectFit: "contain",
-    
+
                 }}
               />
 
               <div style={{ flex: 1 }}>
-                <Link to={`/book/${r.bookId}`} style={{color:"black"}}>
+                <Link to={`/book/${r.bookId}`} style={{ color: "black" }}>
                   {book?.title || "Unknown Title"}
                 </Link>
-
+  {/*Edit review*/}
                 {editingId === r._id ? (
                   <>
                     <StarRating
@@ -200,19 +208,19 @@ const uniqueBookIds = Array.from(
                       editable
                       onChange={(val) => setEditRating(val)}
                     />
-<div>
-                    <textarea style={{display: "flex", flexWrap: "wrap", width: "100%", height: "10em", border: "none", fontFamily:"manrope", margin: "1em"}}
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                    />
-  </div>
-                    <button style={{ margin:"1em", width: "7em", color: "white" }} onClick={() => handleUpdate(r._id)}>
+                    <div>
+                      <textarea style={{ display: "flex", flexWrap: "wrap", width: "100%", height: "10em", border: "none", fontFamily: "manrope", margin: "1em" }}
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                      />
+                    </div>
+                    <button style={{ margin: "1em", width: "7em", color: "white" }} onClick={() => handleUpdate(r._id)}>
                       Save
                     </button>
-                    <button style={{width: "7em", color: "white" }} onClick={() => setEditingId(null)}>
+                    <button style={{ width: "7em", color: "white" }} onClick={() => setEditingId(null)}>
                       Cancel
                     </button>
-                </>
+                  </>
                 ) : (
                   <>
                     <StarRating rating={r.rating} />
@@ -221,13 +229,14 @@ const uniqueBookIds = Array.from(
                       {new Date(r.createdAt).toLocaleDateString()}
                     </small>
 
-                    <div style={{display:"flex", justifyContent:"center", gap: "2em"}}>
-                      <button style={{width: "7em"}}onClick={() => startEditing(r)}>
+                    <div style={{ display: "flex", justifyContent: "center", gap: "2em" }}>
+                      <button style={{ width: "7em" }} onClick={() => startEditing(r)}>
                         Edit
                       </button>
+                        {/*Delete review*/}
                       <button
                         onClick={() => handleDelete(r._id)}
-                        style={{width: "7em", color: "white" }}
+                        style={{ width: "7em", color: "white" }}
                       >
                         Delete
                       </button>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+//book interface
 interface Book {
   id: string;
   volumeInfo: {
@@ -10,7 +11,10 @@ interface Book {
   };
 }
 
+//search book component
 function BookSearch() {
+
+  //states
   const [query, setQuery] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,11 +23,14 @@ function BookSearch() {
   const [totalItems, setTotalItems] = useState(0);
   const navigate = useNavigate();
 
+  //max books showing per search
   const maxResults = 8;
 
+  //fetch books from backend (google books API)
   const fetchBooks = async (newStartIndex: number) => {
     if (!query) return;
 
+    //loading screen
     setLoading(true);
     setError("");
 
@@ -33,6 +40,7 @@ function BookSearch() {
       );
       const data = await res.json();
 
+
       if (!data.items || data.items.length === 0) {
         setBooks([]);
         setError("No books found");
@@ -40,28 +48,35 @@ function BookSearch() {
         return;
       }
 
+      //set data as books
       setBooks(data.items);
       setTotalItems(data.totalItems || 0);
       setStartIndex(newStartIndex);
     } catch (err) {
+      //if error, show error
       console.error(err);
       setError("Something went wrong. Try again.");
     } finally {
+      //remove loading
       setLoading(false);
     }
   };
 
+  //handle search form event
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     fetchBooks(0);
   };
 
+  //Next and Previous buttons for result
   const handlePrev = () => fetchBooks(Math.max(0, startIndex - maxResults));
   const handleNext = () => fetchBooks(startIndex + maxResults);
 
   return (
     <div style={{ padding: "1rem" }}>
       <h2>Search Books</h2>
+
+      {/* search form */}
       <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
         <input
           type="text"
@@ -78,6 +93,7 @@ function BookSearch() {
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
+      {/* Book grid */}
       <div
         style={{
           display: "grid",
@@ -109,8 +125,10 @@ function BookSearch() {
             <p style={{ fontSize: "0.7rem", fontWeight: "600", color: "#555" }}>
               {book.volumeInfo.authors?.join(", ") || "Unknown Author"}
             </p>
+            {/* Navigate to book */}
             <button
               onClick={() =>
+
                 navigate(`/book/${book.id}`)
               }
             >
@@ -120,6 +138,7 @@ function BookSearch() {
         ))}
       </div>
 
+     {/* Previous and next page buttons */}
       {books.length > 0 && (
         <div style={{ marginTop: "1rem", display: "flex", justifyContent: "center", gap: "1rem" }}>
           <button onClick={handlePrev} disabled={startIndex === 0}>

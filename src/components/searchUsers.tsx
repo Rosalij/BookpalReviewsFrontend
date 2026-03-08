@@ -9,9 +9,12 @@ interface SearchUsersProps {
   setSavedUsers: React.Dispatch<React.SetStateAction<User[]>>;
 }
 
+
 const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) => {
   const { user: currentUser } = useAuth();
+
   const token = localStorage.getItem("token");
+
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -25,6 +28,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
         const res = await fetch("https://librarybackend-c0p9.onrender.com/api/users");
         if (!res.ok) throw new Error("Failed to fetch users");
         const data: User[] = await res.json();
+        //dont show current user
         setUsers(data.filter(u => u._id !== currentUser?._id));
       } catch (err: unknown) {
         if (err instanceof Error) setError(err.message);
@@ -42,9 +46,11 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
     return users.filter(u => u.username.toLowerCase().includes(q));
   }, [search, users]);
 
-  // Follow / Unfollow
+  // Follow / Unfollow users
   const toggleFollow = async (userId: string) => {
     if (!token) return;
+
+    //Method DELETE on unfollow, method POST on follow
     const method = savedUsers.some(u => u._id === userId) ? "DELETE" : "POST";
 
     const res = await fetch(`https://librarybackend-c0p9.onrender.com/api/users/${userId}/save`, {
@@ -53,6 +59,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
     });
     if (!res.ok) return;
 
+ 
     const userObj = users.find(u => u._id === userId);
     if (!userObj) return;
 
@@ -63,7 +70,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
 
   return (
     <div style={{ maxWidth: "20em",  }}>
- 
+  {/*search users*/}
       <input
         type="text"
         placeholder="Search users..."
@@ -76,6 +83,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
       {error && <p>{error}</p>}
       {!loading && filteredUsers.length === 0 && <p>No users found.</p>}
 
+  {/*List users*/}
     {filteredUsers.slice(0, 5).map(u => {
         const isFollowing = savedUsers.some(su => su._id === u._id);
         return (
@@ -106,6 +114,7 @@ const SearchUsers: React.FC<SearchUsersProps> = ({ savedUsers, setSavedUsers }) 
               {u.username}
             </Link>
 
+  {/*follow/unfollow buttons*/}
             {token && (
               <button
                 onClick={() => toggleFollow(u._id)}

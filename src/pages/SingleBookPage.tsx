@@ -2,6 +2,7 @@ import  { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReviewComponent from "../components/ReviewComponent";
 
+
 interface Book {
   volumeInfo: {
     title: string;
@@ -18,9 +19,10 @@ function SingleBookPage() {
   const { bookId } = useParams<{ bookId: string }>();
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false); //expanded description
 
   useEffect(() => {
+    //fetch book from backend on page load via bookId
     const fetchBook = async () => {
       if (!bookId) return;
       try {
@@ -129,7 +131,7 @@ function SingleBookPage() {
               lineHeight: 1.7,
               fontSize: "1rem",
               color: "#333",
-            }}
+            }} //show description with dangerouslySetInnerHTML to avoid <> tags in description
             dangerouslySetInnerHTML={{
               __html: expanded ? description : shortDescription,
             }}
@@ -156,6 +158,7 @@ function SingleBookPage() {
       </div>
 
       <div style={{ marginTop: "4rem" }}>
+        {/*Review component*/}
         <ReviewComponent bookId={bookId || ""} />
       </div>
     </div>

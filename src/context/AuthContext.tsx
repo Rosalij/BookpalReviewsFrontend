@@ -12,6 +12,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const [user, setUser] = useState<User | null>(null);
 
+    //login 
     const login = async (credentials: LoginCredentials) => {
         try {
             const response = await fetch('https://librarybackend-c0p9.onrender.com/api/auth/login', {
@@ -36,13 +37,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
-
+//check token in localstorage
     const checkToken = async () => {
         const token = localStorage.getItem("token");
         if (!token) {
             return;
         }
-
+ //validate
         try {
         const res = await fetch(
                 "https://librarybackend-c0p9.onrender.com/api/auth/validate",

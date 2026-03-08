@@ -141,8 +141,7 @@ header div {
   }
 
   nav {
-    position: absolute;
-    top:7em;
+  
     right: 0;
     background: #2a3e47;
     width: 100vw;
