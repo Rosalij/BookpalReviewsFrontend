@@ -1,4 +1,4 @@
-# Library Review Frontend
+# Bookpal Reviews Frontend
 
 ## Overview
 
