@@ -36,31 +36,37 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             throw error;
         }
     };
+const checkToken = async () => {
+    const token = localStorage.getItem("token");
 
-//check token in localstorage
-    const checkToken = async () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            return;
-        }
- //validate
-        try {
-        const res = await fetch(
-                "https://librarybackend-c0p9.onrender.com/api/auth/validate",
-           
-            );
-
-          
-
-            if (res.ok) {
-                const data = await res.json();
-                setUser(data.user);
-            }
-        } catch (error) {
-            localStorage.removeItem("token")
-            setUser(null)
-        }
+    if (!token) {
+        return;
     }
+
+    try {
+        const res = await fetch(
+            "https://librarybackend-c0p9.onrender.com/api/auth/validate",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (res.ok) {
+            const data = await res.json();
+            setUser(data.user);
+        } else {
+            localStorage.removeItem("token");
+            setUser(null);
+        }
+
+    } catch (error) {
+        localStorage.removeItem("token");
+        setUser(null);
+    }
+};
+
 
     useEffect(() => {
         checkToken();
