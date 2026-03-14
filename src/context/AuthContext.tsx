@@ -47,11 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
         const res = await fetch(
                 "https://librarybackend-c0p9.onrender.com/api/auth/validate",
-                {
-                    headers: {
-                        Authorization: "Bearer " + token
-                    }
-                }
+           
             );
 
           
